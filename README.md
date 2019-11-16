@@ -1,2 +1,13 @@
-# Back-End
-Deployed API built using the REST architectural pattern, data persistence, authentication, automated tests.
+# Medizen Server
+
+Metadata store and api for Medizen.
+
+## Api Documentation
+
+## Database and Schema Design
+
+## Local Development
+
+## Testing
+
+## Deployment
