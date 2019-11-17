@@ -1,7 +1,8 @@
 const db = require('../data/dbConfig.js');
 
 module.exports = {
-  findByUserId
+  findByUserId,
+  add
 }
 
 function findByUserId(id) {
@@ -16,4 +17,8 @@ function findByUserId(id) {
       's.rating',
       's.description'
     )
+}
+
+function add(favorite) {
+  return db('user_favorites').insert(favorite, 'id')
 }
