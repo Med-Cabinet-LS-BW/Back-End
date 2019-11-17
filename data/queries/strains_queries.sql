@@ -1,1 +1,1 @@
-select * from strains
+select * from strains;
