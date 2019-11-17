@@ -36,7 +36,7 @@ router.post(
               email,
               password: hash,
             });
-            const token = getJwtToken(email);
+            const token = getJwtToken(email, user.id);
             res.status(200).json({ user, token });
           });
         });
@@ -62,7 +62,7 @@ router.post('/login', async (req, res) => {
     } else {
       bcrypt.compare(password, user.password, async (err, match) => {
         if (match) {
-          const token = getJwtToken(user.email);
+          const token = getJwtToken(user.email, user.id);
           const userData = await Users.findById(user.id);
           res
             .status(200)
@@ -77,9 +77,10 @@ router.post('/login', async (req, res) => {
   }
 });
 
-function getJwtToken(email) {
+function getJwtToken(email, id) {
   const payload = {
     email,
+    id
   };
   const secret = process.env.JWT_SECRET;
   const options = {
