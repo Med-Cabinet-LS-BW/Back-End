@@ -13,7 +13,7 @@ function findByUserId(user_id) {
 }
 
 function findByTreatmentId(id) {
-  return db('treatments').where({ id });
+  return db('treatments').where({ id }).first();
 }
 
 async function add(treatment) {
@@ -25,7 +25,7 @@ async function update(id, fields) {
   try {
     const updated = await db('treatments').where({ id }).update(fields, 'id');
     if (updated) {
-      return findByTreatmentId(id).first();
+      return findByTreatmentId(id);
     }
   } catch (error) {
     return error
