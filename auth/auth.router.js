@@ -12,6 +12,8 @@ router.post(
     const { email, password } = req.body;
     const errors = validationResult(req);
 
+    console.log(req.body);
+
     if (!errors.isEmpty()) {
       res.status(422).json({
         message: `One or more`,
