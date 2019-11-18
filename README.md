@@ -136,6 +136,35 @@ A successful `get` request with a valid `strain_id` will return a single strain 
 }
 ```
 
+#### `[POST] /api/strains/recommendations` !restricted
+
+A successful `post` request with a valid request body will return a list of recommended strains from the database.
+
+##### Request Body
+
+```
+{
+  filters: ['list','of','user','selected','filters'], // required, typeof array
+  limit: 5 // optional, typeof integer, defaults to 10
+}
+```
+
+##### Response Object
+
+```
+[
+  {
+    strain_id: integer,
+    strain: string,
+    type: string,
+    rating: float,
+    description: string,
+    effects: array,
+    flavors: array
+  }
+]
+```
+
 #### `[GET] /api/favorites/strains` !restricted
 
 A successful `get` request will return a list of the logged in user's favorited strains.
