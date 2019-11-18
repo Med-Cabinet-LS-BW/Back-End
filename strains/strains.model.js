@@ -3,6 +3,7 @@ const db = require('../data/dbConfig.js');
 module.exports = {
   find,
   findById,
+  findByIds,
   add,
 };
 
@@ -14,6 +15,20 @@ function find(limit, offset) {
 
 function findById(strain_id) {
   return db('strains').where('strain_id', '=', strain_id);
+}
+
+function findByIds(strain_ids) {
+  return db('strains')
+    .whereIn('strain_id', strain_ids)
+    .select(
+      'strain',
+      'strain_id',
+      'type',
+      'effects',
+      'flavors',
+      'rating',
+      'description'
+    )
 }
 
 function add(strain) {
