@@ -13,13 +13,14 @@ router.post(
     const errors = validationResult(req);
 
     console.log(req.body);
+    console.log(errors);
 
-    if (!errors.isEmpty()) {
-      res.status(422).json({
-        message: `One or more`,
-        errors: errors.array(),
-      });
-    }
+    // if (!errors.isEmpty()) {
+    //   res.status(422).json({
+    //     message: `One or more`,
+    //     errors: errors.array(),
+    //   });
+    // }
 
     // candidate for custom middleware
     const duplicateUser = await Users.findBy({ email }).first();
