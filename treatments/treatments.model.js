@@ -3,7 +3,9 @@ const db = require('../data/dbConfig.js')
 module.exports = {
   findByUserId,
   findByTreatmentId,
-  add
+  add,
+  update,
+  remove
 }
 
 function findByUserId(user_id) {
@@ -28,4 +30,8 @@ async function update(id, fields) {
   } catch (error) {
     return error
   }
+}
+
+function remove(id) {
+  return db('treatments').where({ id }).del();
 }
