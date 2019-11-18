@@ -12,4 +12,16 @@ router.get('/', async (req, res) => {
   }
 });
 
+router.post('/', async (req, res) => {
+  const treatment = req.body;
+  const { id } = req.docodedToken;
+  treatment.user_id = id;
+  try {
+    const addedTreatment = await Treatments.add(treatment);
+    res.status(201).json(addedTreatment);
+  } catch (error) {
+    res.status(500).json({ message: `error creating treatment for user ${id}` })
+  }
+});
+
 module.exports = router;
