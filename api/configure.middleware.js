@@ -4,6 +4,6 @@ const cors = require('cors');
 
 module.exports = server => {
   server.use(helmet());
-  server.options('*', cors());
+  server.use(cors());
   server.use(json());
 };

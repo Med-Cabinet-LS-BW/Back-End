@@ -6,6 +6,11 @@ const server = express();
 
 configureMiddleware(server);
 
-server.use('/api', apiRouter);
+function enableAllOrigins(req, res, next) {
+  res.header('Access-Control-Allow-Origin', '*');
+  next();
+}
+
+server.use('/api', enableAllOrigins, apiRouter);
 
 module.exports = server;
