@@ -2,13 +2,13 @@ module.exports = {
   development: {
     client: 'sqlite3',
     connection: {
-      filename: './data/medizen.db3'
+      filename: './data/medizen.db3',
     },
     migrations: {
-      directory: './data/migrations'
+      directory: './data/migrations',
     },
     seeds: {
-      directory: './data/seeds'
+      directory: './data/seeds',
     },
     useNullAsDefault: true,
     pool: {
@@ -21,26 +21,26 @@ module.exports = {
   test: {
     client: 'pg',
     connection: {
-      filename: './data/medizen_test.db3'
+      filename: './data/medizen_test.db3',
     },
     migrations: {
-      directory: './data/migrations'
+      directory: './data/migrations',
     },
     seeds: {
-      directory: './data/seeds/test'
+      directory: './data/seeds/test',
     },
-    useNullAsDefault: true
+    useNullAsDefault: true,
   },
 
   production: {
     client: 'pg',
     connection: process.env.DATABASE_URL,
     migrations: {
-      directory: './data/migrations'
+      directory: './data/migrations',
     },
     seeds: {
-      directory: './data/seeds'
+      directory: './data/seeds',
     },
-    useNullAsDefault: true
-  }
-}
+    useNullAsDefault: true,
+  },
+};

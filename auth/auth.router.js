@@ -19,22 +19,30 @@ router.post(
       });
     }
 
-    try {
-      bcrypt.genSalt(10, (err, salt) => {
-        bcrypt.hash(password, salt, async (err, hash) => {
-          const user = await Users.create({
-            email,
-            password: hash,
+    // candidate for custom middleware
+    const duplicateUser = await Users.findBy({ email }).first();
+    if (duplicateUser) {
+      res
+        .status(400)
+        .json({ message: `A user with that email address already exists.`, duplicateUser });
+    } else {
+      try {
+        bcrypt.genSalt(10, (err, salt) => {
+          bcrypt.hash(password, salt, async (err, hash) => {
+            const user = await Users.create({
+              email,
+              password: hash,
+            });
+            const token = getJwtToken(email);
+            res.status(200).json({ user, token });
           });
-          const token = getJwtToken(email);
-          res.status(200).json({ user, token });
         });
-      });
-    } catch (error) {
-      res.status(500).json({
-        message: `There was an error saving the user to the database. Retry the register request.`,
-        error,
-      });
+      } catch (error) {
+        res.status(500).json({
+          message: `There was an error saving the user to the database. Retry the register request.`,
+          error,
+        });
+      }
     }
   }
 );
