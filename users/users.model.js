@@ -18,6 +18,10 @@ function findById(id) {
 }
 
 async function create(user) {
-  const [id] = await db('users').insert(user, 'id', 'email', 'firstname', 'lastname', 'role');
-  return findById(id);
+  try {
+    const [id] = await db('users').insert(user, 'id', 'email', 'firstname', 'lastname', 'role');
+    return findById(id);
+  } catch (error) {
+    return error;
+  }
 }
