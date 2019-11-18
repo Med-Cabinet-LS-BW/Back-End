@@ -1,0 +1,43 @@
+{
+  "name": "medizen-server",
+  "version": "0.0.1",
+  "description": "Metadata store and api for medizen",
+  "main": "index.js",
+  "scripts": {
+    "test": "cross-env DB_ENV=test jest --watch",
+    "dev": "nodemon index.js",
+    "start": "node index.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Med-Cabinet-LS-BW/Back-End.git"
+  },
+  "author": "Joseph Lambert",
+  "license": "GPL-3.0-or-later",
+  "bugs": {
+    "url": "https://github.com/Med-Cabinet-LS-BW/Back-End/issues"
+  },
+  "homepage": "https://github.com/Med-Cabinet-LS-BW/Back-End#readme",
+  "dependencies": {
+    "bcryptjs": "^2.4.3",
+    "cors": "^2.8.5",
+    "cross-env": "^6.0.3",
+    "dotenv": "^8.2.0",
+    "express": "^4.17.1",
+    "express-validator": "^6.2.0",
+    "helmet": "^3.21.2",
+    "jsonwebtoken": "^8.5.1",
+    "knex": "^0.20.2",
+    "knex-cleaner": "^1.3.0",
+    "pg": "^7.12.1",
+    "sqlite3": "^4.1.0"
+  },
+  "devDependencies": {
+    "jest": "^24.9.0",
+    "nodemon": "^1.19.4",
+    "supertest": "^4.0.2"
+  },
+  "jest": {
+    "testEnvironment": "node"
+  }
+}
