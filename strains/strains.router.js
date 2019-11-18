@@ -1,4 +1,5 @@
 const router = require('express').Router();
+const axios = require('axios')
 
 const Strains = require('./strains.model.js');
 const { normalizeStrains, getStrains } = require('./strains.helpers.js');
@@ -44,6 +45,40 @@ router.post('/', async (req, res) => {
     });
   }
 });
+
+router.post('/recommendations', async (req, res) => {
+
+  /**
+   * Expects a req.body
+     req.body = {
+      filters: array, // required
+      limit: number // optional, defaults to 10
+     }
+   */
+
+  // 1. validate req.body
+  const { filters } = req.body
+  let limit = req.body.limit || 10
+  if (!filters) {
+    res.status(400).json({ message: `filters are required.` })
+  } else if (!filters.length) {
+    res.status(400).json({ message: `Received filters of type ${typeof filters}. Filters must be of type array.` })
+  } else {
+    try {
+      // 2. build request url using req.body
+      const filterString = filters.join('%2C')
+      const url = `https://medizen-ds.herokuapp.com/rec/${limit}/${filterString}`
+      // 3. make get request to ds_api
+      const { data: strainIds } = await axios.get(url)
+      // 4. hydrate urls from ds_api
+      const strains = await Strains.findByIds(strainIds)
+      // 5. return hydrated response to client
+      res.status(200).json(normalizeStrains(strains))
+    } catch (error) {
+      res.status(500).json({ message: `Could not GET from ds api` })
+    }
+  }
+})
 
 router.post('/fetch-all-strains', async (req, res) => {
   const { username } = req.body;
