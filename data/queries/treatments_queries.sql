@@ -1,0 +1,1 @@
+select * from treatments where user_id=3
