@@ -1,1 +1,1 @@
-select * from strains
+select * from strains limit 10 offset 10
