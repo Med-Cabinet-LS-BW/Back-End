@@ -85,6 +85,26 @@ A successful `get` request will return a list of strains from the database.
 
 ```
 {
+  id: number,
+  strain_id: number,
+  strain: string,
+  type: string,
+  rating: float,
+  description: string,
+  effects: array,
+  flavors: array
+}
+```
+
+#### `[GET] /api/strains/:strain_id`
+
+A successful `get` request with a valid `strain_id` will return a single strain from the database.
+
+##### Response Object
+
+```
+{
+  id: number,
   strain_id: number,
   strain: string,
   type: string,
