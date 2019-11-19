@@ -24,6 +24,8 @@ async function getStrains() {
           type: Type,
           rating: Rating,
           description: Description,
+          flavors: Flavor,
+          effects: Effects,
         };
       }
     );
