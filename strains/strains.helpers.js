@@ -3,6 +3,7 @@ const url = `https://medizen-ds.herokuapp.com/strains`;
 
 module.exports = {
   normalizeStrains,
+  getStrains,
 };
 
 function normalizeStrains(strains) {
@@ -15,7 +16,7 @@ function normalizeStrains(strains) {
 
 async function getStrains() {
   try {
-    const strainData = await (await axios.get(url)).data.map(
+    return await (await axios.get(url)).data.map(
       ({ index, Strain, Type, Rating, Effects, Flavor, Description }) => {
         return {
           strain_id: index,
@@ -26,8 +27,6 @@ async function getStrains() {
         };
       }
     );
-    console.log(strainData);
-    return strainData;
   } catch (error) {
     console.log(error);
   }
