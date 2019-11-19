@@ -10,6 +10,8 @@ Front end application: https://front-end-henna-mu.now.sh/
 
 base URL: `https://medizen-api.herokuapp.com/api`
 
+`!restricted` means the route requires a jwt token passed in the headers to access. Successful registration or login will provide you with a jwt token to use.
+
 ### Endpoints
 
 #### `[POST] /auth/register`
@@ -77,7 +79,7 @@ On successful login of a user, the api with return an object that looks like thi
 
 Save the token, you will need it to make authenticated requests to restricted resources.
 
-#### `[GET] /api/strains`
+#### `[GET] /api/strains` !restricted
 
 A successful `get` request will return a list of strains from the database.
 
@@ -96,7 +98,7 @@ A successful `get` request will return a list of strains from the database.
 }
 ```
 
-#### `[GET] /api/strains/:strain_id`
+#### `[GET] /api/strains/:strain_id` !restricted
 
 A successful `get` request with a valid `strain_id` will return a single strain from the database.
 
