@@ -60,10 +60,13 @@ router.post('/login', async (req, res) => {
         .status(404)
         .json({ message: `User with provided credentials not found`, user: { email, password } });
     } else {
-      bcrypt.compare(password, user.password, function(err, match) {
+      bcrypt.compare(password, user.password, async (err, match) => {
         if (match) {
-          const token = getJwtToken(user.email, user.department);
-          res.status(200).json({ message: `Welcome back ${user.email}!`, token });
+          const token = getJwtToken(user.email);
+          const userData = await Users.findById(user.id);
+          res
+            .status(200)
+            .json({ message: `Welcome back ${user.email}!`, user: { ...userData }, token });
         } else {
           res.status(401).json({ message: `You shall not pass!` });
         }
