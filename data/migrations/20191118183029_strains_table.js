@@ -5,12 +5,18 @@ exports.up = function(knex) {
       .string('strain', 128)
       .notNullable()
       .unique();
+    strains
+      .integer('strain_id')
+      .notNullable()
+      .unique();
     strains.string('type', 128).notNullable();
+    strains.string('effects', 255).notNullable();
+    strains.string('flavors', 255).notNullable();
     strains.float('rating', 8, 2);
     strains.string('description', 500);
   });
 };
 
 exports.down = function(knex) {
-  knex.schema.dropTableIfExists('strains');
+  return knex.schema.dropTableIfExists('strains');
 };
