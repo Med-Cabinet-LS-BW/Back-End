@@ -63,6 +63,7 @@ On successful login of a user, the api with return an object that looks like thi
 
 ```
 {
+  message: "Welcome back testers@lambda.com!"
   user: {
     id: 19,
     email: "testers@lambda.com",
