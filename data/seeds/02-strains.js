@@ -7,6 +7,6 @@ exports.seed = async function(knex) {
   } catch (error) {
     console.log(error);
   } finally {
-    return knex('strains').insert(strains.slice(0, 199));
+    return knex('strains').insert(strains.slice(0, 100));
   }
 };
