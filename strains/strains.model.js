@@ -1,12 +1,14 @@
 const db = require('../data/dbConfig.js');
 
 module.exports = {
-  findAll,
+  find,
   findById,
 };
 
-function findAll() {
-  return db('strains');
+function find(limit, offset) {
+  return db('strains')
+    .limit(limit)
+    .offset(offset);
 }
 
 function findById(strain_id) {

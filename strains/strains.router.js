@@ -4,8 +4,10 @@ const Strains = require('./strains.model.js');
 const { normalizeStrains } = require('./strains.helpers.js');
 
 router.get('/', async (req, res) => {
+  const limit = req.query.limit || 20;
+  const offset = req.query.offset || 0;
   try {
-    let strains = await Strains.findAll();
+    let strains = await Strains.find(limit, offset);
     res.status(200).json(normalizeStrains(strains));
   } catch (error) {
     res
