@@ -1,1 +1,1 @@
-select * from users;
+select * from users where birth_date > '1980-01-01';
