@@ -105,16 +105,20 @@ https://medizen-api.herokuapp.com/api/strains?limit=20&offset=40
 ##### Response Object
 
 ```
-{
-  id: number,
-  strain_id: number,
-  strain: string,
-  type: string,
-  rating: float,
-  description: string,
-  effects: array,
-  flavors: array
-}
+[
+  {
+    id: number,
+    strain_id: number,
+    strain: string,
+    type: string,
+    rating: float,
+    description: string,
+    effects: array,
+    flavors: array,
+    is_favorite: boolean
+  },
+  ...
+]
 ```
 
 #### `[GET] /api/strains/:strain_id` !restricted
@@ -132,7 +136,8 @@ A successful `get` request with a valid `strain_id` will return a single strain 
   rating: float,
   description: string,
   effects: array,
-  flavors: array
+  flavors: array,
+  is_favorite: boolean
 }
 ```
 
@@ -160,7 +165,8 @@ A successful `post` request with a valid request body will return a list of reco
     rating: float,
     description: string,
     effects: array,
-    flavors: array
+    flavors: array,
+    is_favorite: boolean
   }
 ]
 ```
@@ -174,15 +180,17 @@ A successful `get` request will return a list of the logged in user's favorited 
 ```
 [
   {
-    "favorite_id": integer,
-    "strain_id": integer,
-    "strain": string,
-    "type": string,
-    "effects": array,
-    "flavors": array,
-    "rating": float,
-    "description": string
+    favorite_id: integer,
+    strain_id: integer,
+    strain: string,
+    type: string,
+    effects: array,
+    flavors: array,
+    rating: float,
+    description: string,
+    is_favorite: boolean
   },
+  ...
 ]
 ```
 
@@ -212,15 +220,132 @@ A successful `delete` request will return the strain removed from the user's fav
 
 ```
   {
-    "id": integer,
-    "strain_id": integer,
-    "strain": string,
-    "type": string,
-    "effects": array,
-    "flavors": array,
-    "rating": float,
-    "description": string
+    id: integer,
+    strain_id: integer,
+    strain: string,
+    type: string,
+    effects: array,
+    flavors: array,
+    rating: float,
+    description: string
   }
+```
+
+#### Treatments
+
+#### `[GET] /treatments` !restricted
+
+Returns a list of the current user's treatment plans
+
+##### Response Object
+
+```
+[
+  {
+    id: integer,
+    user_id: integer,
+    strain: string,
+    method: string,
+    dosage: string,
+    schedule: string,
+    symptoms: string
+  },
+  ...
+]
+```
+
+#### `[GET] /treatments/:treatment_id` !restricted
+
+Returns a treatment plan with the provided treatment_id
+
+##### Response Object
+
+```
+  {
+    id: integer,
+    user_id: integer,
+    strain: string,
+    method: string,
+    dosage: string,
+    schedule: string,
+    symptoms: string
+  }
+```
+
+#### `[POST] /treatments` !restricted
+
+Returns the created treatment plan
+
+##### Request Body
+
+```
+  {
+    strain: string,
+    method: string,
+    dosage: string,
+    schedule: string,
+    symptoms: string
+  }
+```
+
+##### Response Object
+
+```
+  {
+    id: integer,
+    user_id: integer,
+    strain: string,
+    method: string,
+    dosage: string,
+    schedule: string,
+    symptoms: string
+  }
+```
+
+#### `[PUT] /treatments/:treatment_id` !restricted
+
+Returns the updated treatment plan
+
+##### Request Body
+
+You can update any nunmber of fields at a time that you want.
+The `PUT` request requires at least one field present to update the treatment plan.
+
+
+```
+  {
+    strain: string, //optional
+    method: string, //optional
+    dosage: string, //optional
+    schedule: string, //optional
+    symptoms: string //optional
+  }
+```
+
+##### Response Object
+
+```
+  {
+    id: integer,
+    user_id: integer,
+    strain: string,
+    method: string,
+    dosage: string,
+    schedule: string,
+    symptoms: string
+  }
+```
+
+#### `[DELETE] /treatments/:treatment_id` !restricted
+
+Returns confirmation of deleted treatment plan
+
+##### Response Object
+
+```
+{
+  message: string
+}
 ```
 
 ## Database and Schema Design
