@@ -93,6 +93,27 @@ describe('strains model', () => {
     })
   });
 
+  describe('findById', () => {
+    it('returns a strain with the same id as the provided id', async () => {
+      await Strains.add(strains[0]);
+      const strain = await Strains.findById(1)
+      expect(strain.id).toBe(1);
+    })
+
+    it('returns a strain with the same fields as the provided strain', async () => {
+      await Strains.add(strains[0]);
+      const strain = await Strains.findById(1)
+      expect(strain).toHaveProperty('id')
+      expect(strain).toHaveProperty('strain_id')
+      expect(strain).toHaveProperty('strain')
+      expect(strain).toHaveProperty('type')
+      expect(strain).toHaveProperty('effects')
+      expect(strain).toHaveProperty('flavors')
+      expect(strain).toHaveProperty('rating')
+      expect(strain).toHaveProperty('description')
+    })
+  })
+
   describe('add', () => {
     it('adds strains to the database', async () => {
       let strainsCount;
@@ -113,4 +134,5 @@ describe('strains model', () => {
       expect(strain.strain).toBe('purple Haze');
     });
   });
+
 });
