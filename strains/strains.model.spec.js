@@ -84,6 +84,13 @@ describe('strains model', () => {
       strainsCount = await Strains.find(null, offset);
       expect(strainsCount[0].strain).toBe('Slam Donk');
     });
+
+    it('returns a list of strains ordered by strain_id', async () => {
+      strains.forEach(async s => await Strains.add(s));
+      const addedStrains = await Strains.find();
+      const sequential = addedStrains[0].strain_id < addedStrains[1].strain_id;
+      expect(sequential).toBe(true);
+    })
   });
 
   describe('add', () => {
