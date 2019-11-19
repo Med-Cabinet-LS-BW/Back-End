@@ -14,10 +14,15 @@ router.get('/', async (req, res) => {
   }
 });
 
-router.get('/:id', async (req, res) => {
+router.get('/:strain_id', async (req, res) => {
+  const strain_id = req.params.strain_id;
   try {
-    const strains = await Strains.findAll();
-    res.status(200).json(strains);
+    const strain = await Strains.findById(strain_id).first();
+    if (strain) {
+      res.status(200).json(strain);
+    } else {
+      res.status(404).json({ message: `Strain with strain_id ${strain_id} not found.` });
+    }
   } catch (error) {
     res
       .status(500)
