@@ -83,6 +83,25 @@ Save the token, you will need it to make authenticated requests to restricted re
 
 A successful `get` request will return a list of strains from the database.
 
+Accepts `limit` and `offset` query params for pagination.
+
+Default request will return first 20 items in the list.
+
+Example url with `limit` and `offset` applied:
+
+```
+https://medizen-api.herokuapp.com/api/strains?limit=20&offset=0
+// will return first 20 items in the list
+
+https://medizen-api.herokuapp.com/api/strains?limit=20&offset=20
+// will return 20 items starting at item 20
+
+https://medizen-api.herokuapp.com/api/strains?limit=20&offset=40
+// will return 20 items starting at item 40
+
+// so on and so forth until there are no more items
+```
+
 ##### Response Object
 
 ```
