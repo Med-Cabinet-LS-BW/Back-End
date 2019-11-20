@@ -26,4 +26,15 @@ router.post('/strains', validateStrainId, async (req, res) => {
   }
 });
 
+router.delete('/strains/:favorite_id', async (req, res) => {
+  const { favorite_id } = req.params;
+  const user_id = req.docodedToken.id;
+  try {
+    const removedFavorite = await Favorites.remove(favorite_id, user_id);
+    res.status(200).json(removedFavorite);
+  } catch (error) {
+    res.status(500).json({ message: `Error removing favorite from database`, error });
+  }
+});
+
 module.exports = router;
