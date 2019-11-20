@@ -17,5 +17,5 @@ function findById(strain_id) {
 }
 
 function add(strain) {
-  return db('strains').insert(strain);
+  return db('strains').insert(strain, 'strain_id');
 }
