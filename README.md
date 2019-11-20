@@ -125,8 +125,8 @@ A successful `get` request with a valid `strain_id` will return a single strain 
 
 ```
 {
-  id: number,
-  strain_id: number,
+  id: integer,
+  strain_id: integer,
   strain: string,
   type: string,
   rating: float,
@@ -134,6 +134,64 @@ A successful `get` request with a valid `strain_id` will return a single strain 
   effects: array,
   flavors: array
 }
+```
+
+#### `[GET] /api/favorites/strains` !restricted
+
+A successful `get` request will return a list of the logged in user's favorited strains.
+
+##### Response Object
+
+```
+[
+  {
+    "favorite_id": integer,
+    "strain_id": integer,
+    "strain": string,
+    "type": string,
+    "effects": array,
+    "flavors": array,
+    "rating": float,
+    "description": string
+  },
+]
+```
+
+#### `[POST] /api/favorites/strains` !restricted
+
+A successful `post` request will return the favorite_id of the favorited strain.
+
+##### Request Body
+
+```
+{ strain_id: integer }
+```
+
+##### Response Object
+
+```
+[
+  integer
+]
+```
+
+#### `[DELETE] /api/favorites/strains/:favorite_id` !restricted
+
+A successful `delete` request will return the strain removed from the user's favorites list.
+
+##### Response Object
+
+```
+  {
+    "id": integer,
+    "strain_id": integer,
+    "strain": string,
+    "type": string,
+    "effects": array,
+    "flavors": array,
+    "rating": float,
+    "description": string
+  }
 ```
 
 ## Database and Schema Design
