@@ -13,7 +13,7 @@ router.get('/', async (req, res) => {
       const is_favorite = await Strains.isFavorite(s.strain_id, id);
       return { ...s, is_favorite };
     });
-    res.status(200).json(normalizeStrains(strains)); // this is going to throw an error if only 1 strain is returned from the db
+    res.status(200).json(normalizeStrains(strains));
   } catch (error) {
     res
       .status(500)
@@ -53,6 +53,7 @@ router.post('/', async (req, res) => {
 router.post('/recommendations', async (req, res) => {
   // middleware candidate
   const { filters } = req.body;
+  const { id } = req.docodedToken;
   let limit = req.body.limit || 10;
   if (!filters) {
     res.status(400).json({ message: `filters are required.` });
@@ -69,7 +70,10 @@ router.post('/recommendations', async (req, res) => {
       const url = `https://medizen-ds.herokuapp.com/rec/${limit}/${filterString}`;
 
       const { data: strainIds } = await axios.get(url);
-      const strains = await Strains.findByIds(strainIds);
+      const strains = await Strains.findByIds(strainIds).map(async s => {
+        const is_favorite = await Strains.isFavorite(s.strain_id, id);
+        return { ...s, is_favorite };
+      });
 
       res.status(200).json(normalizeStrains(strains));
     } catch (error) {
