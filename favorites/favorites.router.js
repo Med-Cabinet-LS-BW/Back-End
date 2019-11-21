@@ -11,6 +11,7 @@ router.get('/strains', async (req, res) => {
     let favorites = await Favorites.findByUserId(id);
     if (favorites.length > 0) {
       favorites = normalizeStrains(favorites);
+      favorites.forEach(f => (f.is_favorite = true));
     }
     res.status(200).json(favorites);
   } catch (error) {
