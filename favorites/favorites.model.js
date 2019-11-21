@@ -36,7 +36,6 @@ async function remove(id, user_id) {
     await db('user_favorites')
       .where({ id, user_id })
       .del();
-    console.log(strain_id.strain_id);
     return db('strains')
       .where(strain_id)
       .select('*')
