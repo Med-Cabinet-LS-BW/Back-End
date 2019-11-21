@@ -5,6 +5,7 @@ module.exports = {
   findById,
   findByIds,
   add,
+  isFavorite,
 };
 
 const strainFields = [
@@ -38,4 +39,9 @@ function findByIds(strain_ids) {
 
 function add(strain) {
   return db('strains').insert(strain, 'strain_id');
+}
+
+async function isFavorite(strain_id, user_id) {
+  const favorite = await db('user_favorites').where({ strain_id, user_id });
+  return !favorite.length ? false : true;
 }

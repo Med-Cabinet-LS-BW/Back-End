@@ -1,5 +1,5 @@
 const router = require('express').Router();
-const axios = require('axios')
+const axios = require('axios');
 
 const Strains = require('./strains.model.js');
 const { normalizeStrains, getStrains } = require('./strains.helpers.js');
@@ -7,9 +7,13 @@ const { normalizeStrains, getStrains } = require('./strains.helpers.js');
 router.get('/', async (req, res) => {
   const limit = req.query.limit || 20;
   const offset = req.query.offset || 0;
+  const { id } = req.docodedToken;
   try {
-    let strains = await Strains.find(limit, offset);
-    res.status(200).json(normalizeStrains(strains));
+    const strains = await Strains.find(limit, offset).map(async s => {
+      const is_favorite = await Strains.isFavorite(s.strain_id, id);
+      return { ...s, is_favorite };
+    });
+    res.status(200).json(normalizeStrains(strains)); // this is going to throw an error if only 1 strain is returned from the db
   } catch (error) {
     res
       .status(500)
@@ -48,32 +52,32 @@ router.post('/', async (req, res) => {
 
 router.post('/recommendations', async (req, res) => {
   // middleware candidate
-  const { filters } = req.body
-  let limit = req.body.limit || 10
+  const { filters } = req.body;
+  let limit = req.body.limit || 10;
   if (!filters) {
-    res.status(400).json({ message: `filters are required.` })
+    res.status(400).json({ message: `filters are required.` });
   } else if (!filters.length) {
-    res.status(400).json({ message: `Received filters of type ${typeof filters}. Filters must be of type array.` })
+    res.status(400).json({
+      message: `Received filters of type ${typeof filters}. Filters must be of type array.`,
+    });
   } else {
-
     try {
-
       // needs better error handling here
       // lots of requests happening
 
-      const filterString = filters.join('%2C')
-      const url = `https://medizen-ds.herokuapp.com/rec/${limit}/${filterString}`
+      const filterString = filters.join('%2C');
+      const url = `https://medizen-ds.herokuapp.com/rec/${limit}/${filterString}`;
 
-      const { data: strainIds } = await axios.get(url)
-      const strains = await Strains.findByIds(strainIds)
+      const { data: strainIds } = await axios.get(url);
+      const strains = await Strains.findByIds(strainIds);
 
-      res.status(200).json(normalizeStrains(strains))
+      res.status(200).json(normalizeStrains(strains));
     } catch (error) {
-      console.log(error)
-      res.status(500).json({ message: `Could not GET from ds api` })
+      console.log(error);
+      res.status(500).json({ message: `Could not GET from ds api` });
     }
   }
-})
+});
 
 router.post('/fetch-all-strains', async (req, res) => {
   const { username } = req.body;
