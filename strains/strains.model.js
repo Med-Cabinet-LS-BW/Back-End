@@ -7,10 +7,23 @@ module.exports = {
   add,
 };
 
+const strainFields = [
+  'id',
+  'strain',
+  'strain_id',
+  'type',
+  'effects',
+  'flavors',
+  'rating',
+  'description',
+];
+
 function find(limit, offset) {
   return db('strains')
+    .orderBy('strain_id')
     .limit(limit)
-    .offset(offset);
+    .offset(offset)
+    .select(...strainFields);
 }
 
 function findById(strain_id) {
@@ -20,15 +33,7 @@ function findById(strain_id) {
 function findByIds(strain_ids) {
   return db('strains')
     .whereIn('strain_id', strain_ids)
-    .select(
-      'strain',
-      'strain_id',
-      'type',
-      'effects',
-      'flavors',
-      'rating',
-      'description'
-    )
+    .select(...strainFields);
 }
 
 function add(strain) {
