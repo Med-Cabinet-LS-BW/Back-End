@@ -19,7 +19,7 @@ module.exports = {
   },
 
   test: {
-    client: 'pg',
+    client: 'sqlite3',
     connection: {
       filename: './data/medizen_test.db3',
     },
