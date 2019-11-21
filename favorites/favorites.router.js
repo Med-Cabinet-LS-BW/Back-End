@@ -8,7 +8,10 @@ const { validateStrainId } = require('../strains/strains.middleware.js');
 router.get('/strains', async (req, res) => {
   const { id } = req.docodedToken;
   try {
-    const favorites = normalizeStrains(await Favorites.findByUserId(id));
+    let favorites = await Favorites.findByUserId(id);
+    if (favorites.length > 0) {
+      favorites = normalizeStrains(favorites);
+    }
     res.status(200).json(favorites);
   } catch (error) {
     res.status(500).json({ message: `error retrieving favorites from the db`, error });
@@ -31,7 +34,7 @@ router.delete('/strains/:favorite_id', async (req, res) => {
   const user_id = req.docodedToken.id;
   try {
     const removedFavorite = await Favorites.remove(favorite_id, user_id);
-    res.status(200).json(removedFavorite);
+    res.status(200).json(normalizeStrains([removedFavorite]));
   } catch (error) {
     res.status(500).json({ message: `Error removing favorite from database`, error });
   }
