@@ -3,10 +3,10 @@ const axios = require('axios');
 
 const Strains = require('./strains.model.js');
 
-const { getUserFavoritesStrainIds } = require('../favorites/favorites.middleware.js');
+const { findFavoriteStrainIds } = require('../favorites/favorites.middleware.js');
 const { normalizeStrains, getStrains } = require('./strains.helpers.js');
 
-router.get('/', getUserFavoritesStrainIds, async (req, res) => {
+router.get('/', findFavoriteStrainIds, async (req, res) => {
   const limit = req.query.limit;
   const offset = req.query.offset;
   const { favorites } = req;
@@ -26,7 +26,7 @@ router.get('/', getUserFavoritesStrainIds, async (req, res) => {
   }
 });
 
-router.get('/:strain_id', getUserFavoritesStrainIds, async (req, res) => {
+router.get('/:strain_id', findFavoriteStrainIds, async (req, res) => {
   const strain_id = req.params.strain_id;
   const { favorites } = req;
   try {
@@ -62,7 +62,7 @@ router.post('/', async (req, res) => {
   }
 });
 
-router.post('/recommendations', getUserFavoritesStrainIds, async (req, res) => {
+router.post('/recommendations', findFavoriteStrainIds, async (req, res) => {
   // middleware candidate
   const { filters } = req.body;
   const { id } = req.decodedToken;
