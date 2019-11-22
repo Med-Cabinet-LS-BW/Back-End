@@ -24,7 +24,7 @@ router.get('/', async (req, res) => {
 router.get('/:strain_id', async (req, res) => {
   const strain_id = req.params.strain_id;
   try {
-    const strain = await Strains.findById(strain_id).first();
+    const strain = await Strains.findById(strain_id);
     if (strain) {
       res.status(200).json(strain);
     } else {
