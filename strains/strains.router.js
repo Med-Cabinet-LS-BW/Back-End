@@ -65,25 +65,21 @@ router.post('/', async (req, res) => {
 router.post('/recommendations', findFavoriteStrainIds, async (req, res) => {
   // middleware candidate
   const { filters } = req.body;
-  const { id } = req.decodedToken;
   const { favorites } = req;
 
   let limit = req.body.limit || 10;
   if (!filters) {
-    res.status(400).json({ message: `filters are required.` });
+    res.status(400).json({ message: `filters are required in order to receive recommendations` });
   } else if (!filters.length) {
     res.status(400).json({
       message: `Received filters of type ${typeof filters}. Filters must be of type array.`,
     });
   } else {
     try {
-      // needs better error handling here
-      // lots of requests happening
-
       const filterString = filters.join('%2C');
       const url = `https://medizen-ds.herokuapp.com/rec/${limit}/${filterString}`;
-
       const { data: strainIds } = await axios.get(url);
+
       const strains = await Strains.findByIds(strainIds).map(async s => {
         return {
           ...s,
@@ -93,8 +89,7 @@ router.post('/recommendations', findFavoriteStrainIds, async (req, res) => {
 
       res.status(200).json(normalizeStrains(strains));
     } catch (error) {
-      console.log(error);
-      res.status(500).json({ message: `Could not GET from ds api` });
+      res.status(500).json({ error: error.message });
     }
   }
 });
