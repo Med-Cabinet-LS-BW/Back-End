@@ -78,9 +78,9 @@ router.post('/recommendations', findFavoriteStrainIds, async (req, res) => {
     try {
       const filterString = filters.join('%2C');
       const url = `https://medizen-ds.herokuapp.com/rec/${limit}/${filterString}`;
-      const { data: strainIds } = await axios.get(url);
+      const { data: strain_ids } = await axios.get(url);
 
-      const strains = await Strains.findByIds(strainIds).map(async s => {
+      const strains = await Strains.findByIds(strain_ids).map(async s => {
         return {
           ...s,
           is_favorite: favorites.has(s.strain_id),
