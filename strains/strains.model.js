@@ -28,7 +28,9 @@ function find(limit, offset) {
 }
 
 function findById(strain_id) {
-  return db('strains').where('strain_id', '=', strain_id);
+  return db('strains')
+    .where('strain_id', '=', strain_id)
+    .first();
 }
 
 function findByIds(strain_ids) {
@@ -37,8 +39,9 @@ function findByIds(strain_ids) {
     .select(...strainFields);
 }
 
-function add(strain) {
-  return db('strains').insert(strain, 'strain_id');
+async function add(strain) {
+  const [id] = await db('strains').insert(strain, 'strain_id');
+  return findById(id);
 }
 
 async function isFavorite(strain_id, user_id) {
