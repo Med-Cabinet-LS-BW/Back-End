@@ -62,10 +62,12 @@ router.post('/', async (req, res) => {
   }
 });
 
-router.post('/recommendations', async (req, res) => {
+router.post('/recommendations', getUserFavoritesStrainIds, async (req, res) => {
   // middleware candidate
   const { filters } = req.body;
   const { id } = req.decodedToken;
+  const { favorites } = req;
+
   let limit = req.body.limit || 10;
   if (!filters) {
     res.status(400).json({ message: `filters are required.` });
@@ -83,8 +85,10 @@ router.post('/recommendations', async (req, res) => {
 
       const { data: strainIds } = await axios.get(url);
       const strains = await Strains.findByIds(strainIds).map(async s => {
-        const is_favorite = await Strains.isFavorite(s.strain_id, id);
-        return { ...s, is_favorite };
+        return {
+          ...s,
+          is_favorite: favorites.has(s.strain_id),
+        };
       });
 
       res.status(200).json(normalizeStrains(strains));
