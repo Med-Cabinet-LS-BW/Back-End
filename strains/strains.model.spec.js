@@ -48,9 +48,43 @@ describe('strains model', () => {
     await db('strains').truncate();
   });
 
-  // describe('find', () => {
+  describe('find', () => {
+    it('returns at most the first 20 strains in the db', async () => {
+      let strainsCount;
+      strainsCount = await db('strains');
+      expect(strainsCount).toHaveLength(0);
+      strains.forEach(async s => {
+        await Strains.add(s);
+      });
+      strainsCount = await Strains.find();
+      let strainsCountIsLessThanOrEqaul20 = strainsCount.length <= 20 ? true : false;
+      expect(strainsCountIsLessThanOrEqaul20).toBe(true);
+    });
 
-  // })
+    it('returns a number of strains equal to the provided limit', async () => {
+      let strainsCount;
+      let limit = 2;
+      strainsCount = await db('strains');
+      expect(strainsCount).toHaveLength(0);
+      strains.forEach(async s => {
+        await Strains.add(s);
+      });
+      strainsCount = await Strains.find(limit);
+      expect(strainsCount).toHaveLength(limit);
+    });
+
+    it('returns a list of strains offset according to the provided offset', async () => {
+      let strainsCount;
+      let offset = 2;
+      strainsCount = await db('strains');
+      expect(strainsCount).toHaveLength(0);
+      strains.forEach(async s => {
+        await Strains.add(s);
+      });
+      strainsCount = await Strains.find(null, offset);
+      expect(strainsCount[0].strain).toBe('Slam Donk');
+    });
+  });
 
   describe('add', () => {
     it('adds strains to the database', async () => {
