@@ -6,15 +6,17 @@ const Favorites = require('../favorites/favorites.model.js');
 
 const { normalizeStrains, getStrains } = require('./strains.helpers.js');
 
-router.get('/', async (req, res) => {
+router.get('/', getUserFavoritesStrainIds, async (req, res) => {
   const limit = req.query.limit;
   const offset = req.query.offset;
-  const user_id = req.decodedToken.id;
+  const { favorites } = req;
   try {
-    const favorites = new Set(await Favorites.findStrainIdsByUserId(user_id));
+    console.log('favorites', favorites);
     const strains = await Strains.find(limit, offset).map(async s => {
-      const is_favorite = favorites.has(s.strain_id);
-      return { ...s, is_favorite };
+      return {
+        ...s,
+        is_favorite: favorites.has(s.strain_id),
+      };
     });
     res.status(200).json(normalizeStrains(strains));
   } catch (error) {
@@ -27,9 +29,12 @@ router.get('/', async (req, res) => {
 router.get('/:strain_id', async (req, res) => {
   const strain_id = req.params.strain_id;
   try {
+    const favorite = await Favorites.findByStrainIdAndUserId(strain_id, req.decodedToken.id);
+    console.log(favorite);
     const strain = await Strains.findById(strain_id);
     if (strain) {
-      res.status(200).json(strain);
+      strain.is_favorite = favorite ? true : false;
+      res.status(200).json(normalizeStrains([strain]));
     } else {
       res.status(404).json({ message: `Strain with strain_id ${strain_id} not found.` });
     }
@@ -106,5 +111,16 @@ router.post('/fetch-all-strains', async (req, res) => {
     }
   }
 });
+
+// strains middlewares
+async function getUserFavoritesStrainIds(req, res, next) {
+  const user_id = req.decodedToken.id;
+  try {
+    req.favorites = new Set(await Favorites.findStrainIdsByUserId(user_id));
+    next();
+  } catch (error) {
+    res.status(500).json({ message: `Error retrieving favorites for user_id:${user_id}`, error });
+  }
+}
 
 module.exports = router;
