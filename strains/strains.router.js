@@ -26,13 +26,18 @@ router.get('/', getUserFavoritesStrainIds, async (req, res) => {
   }
 });
 
-router.get('/:strain_id', async (req, res) => {
+router.get('/:strain_id', getUserFavoritesStrainIds, async (req, res) => {
   const strain_id = req.params.strain_id;
+  const { favorites } = req;
   try {
-    const favorite = await Favorites.findByStrainIdAndUserId(strain_id, req.decodedToken.id);
-    const strain = await Strains.findById(strain_id);
+    const is_favorite = favorites.has(Number(strain_id));
+    const strain = await Strains.findById(strain_id).then(s => {
+      return {
+        ...s,
+        is_favorite,
+      };
+    });
     if (strain) {
-      strain.is_favorite = favorite ? true : false;
       res.status(200).json(normalizeStrains([strain]));
     } else {
       res.status(404).json({ message: `Strain with strain_id ${strain_id} not found.` });
