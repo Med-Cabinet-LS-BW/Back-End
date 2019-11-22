@@ -22,6 +22,7 @@ const strainFields = [
 function find(limit, offset) {
   limit = limit || 20;
   offset = offset || 0;
+
   return db('strains')
     .orderBy('strain_id')
     .limit(limit)
