@@ -5,9 +5,9 @@ const Strains = require('./strains.model.js');
 const { normalizeStrains, getStrains } = require('./strains.helpers.js');
 
 router.get('/', async (req, res) => {
-  const limit = req.query.limit;
-  const offset = req.query.offset;
-  const { id } = req.decodedToken;
+  const limit = req.query.limit || 20;
+  const offset = req.query.offset || 0;
+  const { id } = req.docodedToken;
   try {
     const strains = await Strains.find(limit, offset).map(async s => {
       const is_favorite = await Strains.isFavorite(s.strain_id, id);
@@ -53,7 +53,7 @@ router.post('/', async (req, res) => {
 router.post('/recommendations', async (req, res) => {
   // middleware candidate
   const { filters } = req.body;
-  const { id } = req.decodedToken;
+  const { id } = req.docodedToken;
   let limit = req.body.limit || 10;
   if (!filters) {
     res.status(400).json({ message: `filters are required.` });
