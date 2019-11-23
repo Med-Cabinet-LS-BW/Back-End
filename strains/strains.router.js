@@ -12,7 +12,6 @@ router.get('/', findFavoriteStrainIds, async (req, res) => {
   const offset = req.query.offset;
   const { favorites } = req;
   try {
-    console.log('favorites', favorites);
     const strains = await Strains.find(limit, offset).map(async s => {
       return {
         ...s,
@@ -29,25 +28,9 @@ router.get('/', findFavoriteStrainIds, async (req, res) => {
 
 router.get('/:strain_id', validateStrainId, findFavoriteStrainIds, async (req, res) => {
   const strain_id = req.params.strain_id;
-  const { favorites } = req;
-  try {
-    const is_favorite = favorites.has(Number(strain_id));
-    const strain = await Strains.findById(strain_id).then(s => {
-      return {
-        ...s,
-        is_favorite,
-      };
-    });
-    if (strain) {
-      res.status(200).json(normalizeStrains([strain]));
-    } else {
-      res.status(404).json({ message: `Strain with strain_id ${strain_id} not found.` });
-    }
-  } catch (error) {
-    res
-      .status(500)
-      .json({ message: `Error retrieving strains from the database. Please try again.`, error });
-  }
+  const { favorites, strain } = req;
+  strain.is_favorite = favorites.has(Number(strain_id));
+  res.status(200).json(normalizeStrains([strain]));
 });
 
 router.post('/', async (req, res) => {
