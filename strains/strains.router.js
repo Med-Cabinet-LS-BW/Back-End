@@ -30,6 +30,7 @@ router.get('/:strain_id', async (req, res) => {
   const strain_id = req.params.strain_id;
   try {
     const favorite = await Favorites.findByStrainIdAndUserId(strain_id, req.decodedToken.id);
+    console.log(favorite);
     const strain = await Strains.findById(strain_id);
     if (strain) {
       strain.is_favorite = favorite ? true : false;
