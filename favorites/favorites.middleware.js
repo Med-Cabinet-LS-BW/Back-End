@@ -1,10 +1,10 @@
 const Favorites = require('../favorites/favorites.model.js');
 
 module.exports = {
-  findFavoriteStrainIds,
+  getUserFavoritesStrainIds,
 };
 
-async function findFavoriteStrainIds(req, res, next) {
+async function getUserFavoritesStrainIds(req, res, next) {
   const user_id = req.decodedToken.id;
   try {
     req.favorites = new Set(await Favorites.findStrainIdsByUserId(user_id));
