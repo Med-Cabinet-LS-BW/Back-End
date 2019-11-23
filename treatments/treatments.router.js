@@ -3,7 +3,7 @@ const router = require('express').Router();
 const Treatments = require('./treatments.model.js')
 
 router.get('/', async (req, res) => {
-  const { id } = req.decodedToken;
+  const { id } = req.docodedToken;
   try {
     const treatments = await Treatments.findByUserId(id)
     res.status(200).json(treatments);
@@ -26,7 +26,7 @@ router.get('/:treatment_id', async (req, res) => {
 
 router.post('/', async (req, res) => {
   const treatment = req.body;
-  const { id } = req.decodedToken;
+  const { id } = req.docodedToken;
   treatment.user_id = id;
   try {
     const addedTreatment = await Treatments.add(treatment);
@@ -39,7 +39,7 @@ router.post('/', async (req, res) => {
 router.put('/:treatment_id', async (req, res) => {
   const fields = req.body;
   const { treatment_id } = req.params;
-  const user_id = req.decodedToken.id;
+  const user_id = req.docodedToken.id;
 
   // validate fields
   // validate treatment_id
@@ -65,7 +65,7 @@ router.put('/:treatment_id', async (req, res) => {
 
 router.delete('/:treatment_id', async (req, res) => {
   const { treatment_id } = req.params;
-  const user_id = req.decodedToken.id;
+  const user_id = req.docodedToken.id;
 
   // validate fields
   // validate treatment_id
