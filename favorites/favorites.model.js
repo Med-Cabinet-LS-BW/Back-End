@@ -3,16 +3,9 @@ const db = require('../data/dbConfig.js');
 module.exports = {
   findStrainIdsByUserId,
   findByUserId,
-  findByStrainIdAndUserId,
   add,
   remove,
 };
-
-async function findByStrainIdAndUserId(strain_id, user_id) {
-  return db('user_favorites')
-    .where({ strain_id, user_id })
-    .first();
-}
 
 function findByUserId(id) {
   return db('user_favorites')
