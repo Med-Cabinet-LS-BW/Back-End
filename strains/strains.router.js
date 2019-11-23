@@ -2,8 +2,8 @@ const router = require('express').Router();
 const axios = require('axios');
 
 const Strains = require('./strains.model.js');
+const Favorites = require('../favorites/favorites.model.js');
 
-const { getUserFavoritesStrainIds } = require('../favorites/favorites.middleware.js');
 const { normalizeStrains, getStrains } = require('./strains.helpers.js');
 
 router.get('/', getUserFavoritesStrainIds, async (req, res) => {
@@ -119,5 +119,16 @@ router.post('/fetch-all-strains', async (req, res) => {
     }
   }
 });
+
+// strains middlewares
+async function getUserFavoritesStrainIds(req, res, next) {
+  const user_id = req.decodedToken.id;
+  try {
+    req.favorites = new Set(await Favorites.findStrainIdsByUserId(user_id));
+    next();
+  } catch (error) {
+    res.status(500).json({ message: `Error retrieving favorites for user_id:${user_id}`, error });
+  }
+}
 
 module.exports = router;
