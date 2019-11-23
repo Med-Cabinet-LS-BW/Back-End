@@ -4,7 +4,6 @@ const axios = require('axios');
 const Strains = require('./strains.model.js');
 
 const { findFavoriteStrainIds } = require('../favorites/favorites.middleware.js');
-const { validateStrainId } = require('./strains.middleware.js');
 const { normalizeStrains, getStrains } = require('./strains.helpers.js');
 
 router.get('/', findFavoriteStrainIds, async (req, res) => {
@@ -27,7 +26,7 @@ router.get('/', findFavoriteStrainIds, async (req, res) => {
   }
 });
 
-router.get('/:strain_id', validateStrainId, findFavoriteStrainIds, async (req, res) => {
+router.get('/:strain_id', findFavoriteStrainIds, async (req, res) => {
   const strain_id = req.params.strain_id;
   const { favorites } = req;
   try {

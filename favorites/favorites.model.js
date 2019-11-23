@@ -4,16 +4,9 @@ module.exports = {
   findStrainIdsByUserId,
   findByUserId,
   findByStrainIdAndUserId,
-  findBy,
   add,
   remove,
 };
-
-async function findBy(params) {
-  return db('user_favorites')
-    .where(params)
-    .first();
-}
 
 async function findByStrainIdAndUserId(strain_id, user_id) {
   return db('user_favorites')
@@ -48,15 +41,19 @@ function add(favorite) {
   return db('user_favorites').insert(favorite, 'id');
 }
 
-async function remove(id) {
+async function remove(id, user_id) {
   try {
-    const favorite = await db('user_favorites')
+    const strain_id = await db('user_favorites')
       .where({ id })
+      .select('strain_id')
       .first();
     await db('user_favorites')
-      .where({ id })
+      .where({ id, user_id })
       .del();
-    return favorite;
+    return db('strains')
+      .where(strain_id)
+      .select('*')
+      .first();
   } catch (error) {
     return error;
   }
