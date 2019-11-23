@@ -4,6 +4,7 @@ const Favorites = require('./favorites.model.js');
 
 const { normalizeStrains } = require('../strains/strains.helpers.js');
 const { validateStrainId } = require('../strains/strains.middleware.js');
+const { validateFavoriteId } = require('./favorites.middleware.js');
 
 router.get('/strains', async (req, res) => {
   const { id } = req.decodedToken;
@@ -19,7 +20,7 @@ router.get('/strains', async (req, res) => {
   }
 });
 
-router.post('/strains', validateStrainId, async (req, res) => {
+router.post('/strains', async (req, res) => {
   const { strain_id } = req.body;
   const user_id = req.decodedToken.id;
   try {
@@ -30,14 +31,15 @@ router.post('/strains', validateStrainId, async (req, res) => {
   }
 });
 
-router.delete('/strains/:favorite_id', async (req, res) => {
+router.delete('/strains/:favorite_id', validateFavoriteId, async (req, res) => {
   const { favorite_id } = req.params;
-  const user_id = req.decodedToken.id;
   try {
-    const removedFavorite = await Favorites.remove(favorite_id, user_id);
-    res.status(200).json(normalizeStrains([removedFavorite]));
+    const removedFavorite = await Favorites.remove(favorite_id);
+    res.status(200).json(removedFavorite);
   } catch (error) {
-    res.status(500).json({ message: `Error removing favorite from database`, error });
+    res
+      .status(500)
+      .json({ message: `Error removing favorite from database`, error: error.message });
   }
 });
 
