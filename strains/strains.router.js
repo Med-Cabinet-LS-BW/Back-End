@@ -2,18 +2,15 @@ const router = require('express').Router();
 const axios = require('axios');
 
 const Strains = require('./strains.model.js');
-const Favorites = require('../favorites/favorites.model.js');
-
 const { normalizeStrains, getStrains } = require('./strains.helpers.js');
 
 router.get('/', async (req, res) => {
   const limit = req.query.limit;
   const offset = req.query.offset;
-  const user_id = req.decodedToken.id;
+  const { id } = req.decodedToken;
   try {
-    const favorites = new Set(await Favorites.findStrainIdsByUserId(user_id));
     const strains = await Strains.find(limit, offset).map(async s => {
-      const is_favorite = favorites.has(s.strain_id);
+      const is_favorite = await Strains.isFavorite(s.strain_id, id);
       return { ...s, is_favorite };
     });
     res.status(200).json(normalizeStrains(strains));

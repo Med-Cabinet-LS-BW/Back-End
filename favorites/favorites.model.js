@@ -1,7 +1,6 @@
 const db = require('../data/dbConfig.js');
 
 module.exports = {
-  findStrainIdsByUserId,
   findByUserId,
   add,
   remove,
@@ -21,13 +20,6 @@ function findByUserId(id) {
       's.rating',
       's.description'
     );
-}
-
-function findStrainIdsByUserId(user_id) {
-  return db
-    .table('user_favorites')
-    .where({ user_id })
-    .pluck('strain_id');
 }
 
 function add(favorite) {
